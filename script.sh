@@ -67,6 +67,11 @@ gcloud compute scp ./nodes_info.txt ubuntu@$CLIENT_MEASURE:~/ --zone europe-west
 
 # Run both
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_AGENT --zone europe-west1-b < ./CCA/mcperf_agent.sh &
+sleep 60
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE --zone europe-west1-b < ./CCA/mcperf_measure.sh
-sleep 100
+sleep 60
 gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf/measure.txt ./memcached.txt --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
+
+
+# Kill the cluster
+# kops delete cluster part1.k8s.local --yes
