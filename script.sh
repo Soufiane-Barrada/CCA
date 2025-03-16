@@ -10,7 +10,7 @@ cd /home/Soufiane/Desktop/CloudComputing/
 
 # Create the Kubernetes cluster
 kops create -f cloud-comp-arch-project/part1.yaml 
-#add my ssh key as a login key for the nodes
+# add my ssh key as a login key for the nodes
 kops create secret --name part1.k8s.local sshpublickey admin -i ~/.ssh/cloud-computing.pub
 # Deploy the cluster
 kops update cluster --name part1.k8s.local --yes --admin
@@ -60,13 +60,13 @@ EOF
 #***************************************************************************
 
 # Initialize the client-agent and the client-measure
-gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$AGENT_NAME --zone europe-west1-b < ./CCA/mcperf_init.sh &
-gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$MEASURE_NAME --zone europe-west1-b < ./CCA/mcperf_init.sh
-gcloud compute scp ./memcached_ip.txt ubuntu@$MEASURE_NAME:~/ --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
-gcloud compute scp ./nodes_info.txt ubuntu@$MEASURE_NAME:~/ --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
+gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_AGENT --zone europe-west1-b < ./CCA/mcperf_init.sh &
+gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE --zone europe-west1-b < ./CCA/mcperf_init.sh
+gcloud compute scp ./memcached_ip.txt ubuntu@$CLIENT_MEASURE:~/ --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
+gcloud compute scp ./nodes_info.txt ubuntu@$CLIENT_MEASURE:~/ --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
 
 # Run both
-gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$AGENT_NAME --zone europe-west1-b < ./CCA/mcperf_agent.sh &
-gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$MEASURE_NAME --zone europe-west1-b < ./CCA/mcperf_measure.sh
+gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_AGENT --zone europe-west1-b < ./CCA/mcperf_agent.sh &
+gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE --zone europe-west1-b < ./CCA/mcperf_measure.sh
 sleep 100
-gcloud compute scp ubuntu@$MEASURE_NAME:~/memcache-perf/measure.txt ./memcached.txt --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
+gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf/measure.txt ./memcached.txt --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
