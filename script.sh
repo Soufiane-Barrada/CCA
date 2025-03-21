@@ -1,4 +1,6 @@
 
+set -e
+
 export PROJECT=`gcloud config get-value project`
 # gcloud config set account sbarrada@ethz.ch
 # gcloud auth login
@@ -59,19 +61,36 @@ EOF
 
 #***************************************************************************
 
-# Initialize the client-agent and the client-measure
+# I. Without Interference
+# Initialize the client-agent and the client-measure VMs
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_AGENT --zone europe-west1-b < ./CCA/mcperf_init.sh &
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE --zone europe-west1-b < ./CCA/mcperf_init.sh
 gcloud compute scp ./memcached_ip.txt ubuntu@$CLIENT_MEASURE:~/ --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
 gcloud compute scp ./nodes_info.txt ubuntu@$CLIENT_MEASURE:~/ --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
 
-# Run both
+# Run agent and measure VMs
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_AGENT --zone europe-west1-b < ./CCA/mcperf_agent.sh &
 sleep 60
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE --zone europe-west1-b < ./CCA/mcperf_measure.sh
-sleep 60
+sleep 30
 gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf/measure.txt ./memcached.txt --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
 
+# II. Interference
+TYPES=(cpu l1d l1i l2 llc membw) 
 
+for TYPE in "${TYPES[@]}"; do
+  kubectl create -f "cloud-comp-arch-project/interference/ibench-${TYPE}.yaml"
+  sleep 60
+  for RUN in {1..3}; do
+    gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE --zone europe-west1-b < ./CCA/mcperf_measure.sh
+    sleep 30
+    
+    gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf/measure.txt "./ibench-${TYPE}-${RUN}.txt" --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
+  
+  kubectl delete pods "ibench-${TYPE}"
+done
+
+
+#**************************************************************************
 # Kill the cluster
 # kops delete cluster part1.k8s.local --yes
