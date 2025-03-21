@@ -3,35 +3,33 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
+import os 
 
-# File paths (replace with your actual file paths)
-file1 = "/Users/ccylmichel/Desktop/CCA/cloud-comp-arch-project/PlotPart1/mcperf_output.txt"
+config_names = ["no_interference", "ibench-CPU", "ibench-l1d", "ibench-l1i", "ibench-l2", "ibench-llc", "ibench-membw"]
 
-# Define file paths for 7 configurations, each with 3 runs
-# Remplacer file1 par les vrais fichiers txt.
-configurations = {
-    "no_interference": [
-        file1, file1, file1
-    ],
-    "ibench-CPU": [
-        file1, file1, file1
-    ],
-    "ibench-l1d": [
-        file1, file1, file1
-    ],
-    "ibench-l1i": [
-        file1, file1, file1
-    ],
-    "ibench-l2": [
-        file1, file1, file1
-    ],
-    "ibench-llc": [
-        file1, file1, file1
-    ],
-    "ibench-membw": [
-        file1, file1, file1
-    ]
-}
+def create_config_dict(dir_names):
+    # usual checks 
+    if len(dir_names) != len(config_names):
+        raise ValueError("expected 7 configs")
+    config_d = {}
+    for i, dir_path in enumerate(dir_names) : 
+        config = config_names[i]
+        if not os.path.isdir(dir_path): 
+            raise NotADirectoryError(f"{dir_path} should be a directory")
+
+        # grab les txt dans les dir
+        txt_files = sorted([os.path.join(dir_path, f) for f in os.listdir(dir_path)
+            if f.endswith(".txt")
+        ])
+
+        # s'attend à 3 runs
+        if len(txt_files) != 3:
+            raise ValueError(f"expected 3 txt files in {dir_path} for config '{config}', found {len(txt_files)}")
+
+        config_d[config] = txt_files
+
+
+    return config_d
 
 def read_mcperf_file(file_path):
     """Reads an mcperf output file and extracts QPS and p95."""
@@ -118,6 +116,11 @@ def main():
     """
     Main function to read files, process 7 configurations, and plot results.
     """
+    dir_names = sys.argv[1:]
+    if not dir_names: 
+        print("Usage: python part1-a.py <no_interference> <ibench-CPU> ... <ibench-membw>") 
+        sys.exit(1)
+    configurations = create_config_dict(dir_names)
     results = {}
     for config, files in configurations.items():
         file1, file2, file3 = files
@@ -153,4 +156,3 @@ if __name__ == "__main__":
 #     else:
 #         for filename in sys.argv[1:]:
 #             process_file(filename)
-
