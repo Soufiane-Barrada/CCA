@@ -68,29 +68,33 @@ gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE 
 gcloud compute scp ./memcached_ip.txt ubuntu@$CLIENT_MEASURE:~/ --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
 gcloud compute scp ./nodes_info.txt ubuntu@$CLIENT_MEASURE:~/ --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
 
-# Run agent and measure VMs
+# Run agent and measure VMs with no interference
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_AGENT --zone europe-west1-b < ./CCA/mcperf_agent.sh &
 sleep 60
-gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE --zone europe-west1-b < ./CCA/mcperf_measure.sh
-sleep 30
-gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf/measure.txt ./memcached.txt --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
+for RUN in {1..3}; do
+  gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE --zone europe-west1-b < ./CCA/mcperf_measure.sh
+  sleep 30
+  gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf/measure.txt "./CCA/no-interference/memcached-${RUN}.txt" --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
+done
+
 
 # II. Interference
 TYPES=(cpu l1d l1i l2 llc membw) 
 
 for TYPE in "${TYPES[@]}"; do
-  kubectl create -f "cloud-comp-arch-project/interference/ibench-${TYPE}.yaml"
-  sleep 60
+  kubectl create -f "./cloud-comp-arch-project/interference/ibench-${TYPE}.yaml"
+  sleep 45
   for RUN in {1..3}; do
     gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE --zone europe-west1-b < ./CCA/mcperf_measure.sh
     sleep 30
-    
-    gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf/measure.txt "./ibench-${TYPE}-${RUN}.txt" --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
-  
+
+    gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf/measure.txt "./CCA/ibench-${TYPE}/ibench-${TYPE}-${RUN}.txt" --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
+  done
   kubectl delete pods "ibench-${TYPE}"
+  sleep 45
 done
 
 
 #**************************************************************************
 # Kill the cluster
-# kops delete cluster part1.k8s.local --yes
+kops delete cluster part1.k8s.local --yes
