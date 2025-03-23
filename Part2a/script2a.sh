@@ -1,4 +1,7 @@
 
+# Deploy the cluster. Once deploy TODO: PUT IN COMMENTS, if run the script again 
+#***************************************************************************
+
 export PROJECT=`gcloud config get-value project`
 # change ethz_id
 export KOPS_STATE_STORE=gs://cca-eth-2025-group-031-cmichel/
@@ -23,16 +26,14 @@ parsec_server=$(grep '^parsec-server' cluster_nodes_info.txt | awk '{print $1}')
 export PARSEC_SERVER="$parsec_server"
 
 
-
-
-
-#***************************************************************************
-
 # Initialize the parsec-server 
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$PARSEC_SERVER --zone europe-west1-b < ./CCA/mcperf_init.sh &
 
 # Assign the appropriate label to the parsec node 
 kubectl label nodes $PARSEC_SERVER cca-project-nodetype=parsec
+
+# Once the cluster is deploy you can just run the script below and put everything in comments above.
+#***************************************************************************
 
 # All the values of workloads and Interferences
 WORKLOADS=("blackscholes" "canneal" "dedup" "ferret" "freqmine" "radix" "vips")
@@ -44,7 +45,7 @@ for workload in "${WORKLOADS[@]}"; do
     kubectl create -f interference/ibench-cpu.yaml
     # Wait for interference to be ready
     sleep 5
-    # Create benchmark and !! Change parsec-dedup to another benchmark !!
+    # Create benchmark 
     kubectl create -f parsec-benchmarks/part2a/parsec-${workload}.yaml
 
     # Wait for job to complete
@@ -66,6 +67,5 @@ done
 # Optional: delete the cluster to save credits
 # kops delete cluster part2a.k8s.local --yes
 
-echo "[DONE] All workloads completed. Logs are saved as ibench-cpu_parsec-<workload>.txt"
 
 
