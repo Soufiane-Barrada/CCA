@@ -1,0 +1,3 @@
+NAME                         STATUS   ROLES           AGE     VERSION   INTERNAL-IP   EXTERNAL-IP     OS-IMAGE             KERNEL-VERSION   CONTAINER-RUNTIME
+master-europe-west1-b-mhq4   Ready    control-plane   2m35s   v1.31.5   10.0.16.3     34.76.172.69    Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
+parsec-server-vd0v           Ready    node            19s     v1.31.5   10.0.16.4     35.241.174.52   Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
