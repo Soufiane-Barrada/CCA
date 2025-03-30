@@ -1,0 +1,8 @@
+Job:  parsec-blackscholes
+Job time:  0:02:05
+Job:  parsec-canneal
+Job time:  0:01:36
+Job:  parsec-dedup
+Job time:  0:00:14
+Job:  parsec-ferret
+Job parsec-ferret has not completed....
