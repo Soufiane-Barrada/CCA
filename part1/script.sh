@@ -65,8 +65,9 @@ EOF
 # Initialize the client-agent and the client-measure VMs
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_AGENT --zone europe-west1-b < ./CCA/mcperf_init.sh &
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE --zone europe-west1-b < ./CCA/mcperf_init.sh
-gcloud compute scp ./memcached_ip.txt ubuntu@$CLIENT_MEASURE:~/ --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
 gcloud compute scp ./nodes_info.txt ubuntu@$CLIENT_MEASURE:~/ --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
+gcloud compute scp ./memcached_ip.txt ubuntu@$CLIENT_MEASURE:~/ --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
+
 
 # Run agent and measure VMs with no interference
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_AGENT --zone europe-west1-b < ./CCA/mcperf_agent.sh &

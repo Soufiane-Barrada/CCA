@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: parsec-vips
+  labels:
+    name: parsec-vips
+spec:
+  template:
+    spec:
+      containers:
+      - image: anakli/cca:parsec_vips
+        name: parsec-vips
+        imagePullPolicy: Always
+        command: ["/bin/sh"]
+        args: 
+          - "-c"
+          - "taskset -c "${VIPS_CORES}" ./run -a run -S parsec -p vips -i native -n "${VIPS_THREADS}""
+      restartPolicy: Never
+      nodeSelector:
+        cca-project-nodetype: "${VIPS_NODE}"
