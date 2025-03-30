@@ -138,10 +138,11 @@ kubectl create -f ./CCA/part3/yaml_files/parsec-freqmine-sub.yaml &
 kubectl create -f ./CCA/part3/yaml_files/parsec-radix-sub.yaml &
 kubectl create -f ./CCA/part3/yaml_files/parsec-vips-sub.yaml &
 
-sleep 500 # in measure we have -t 10 (so 10 minutes maximum runtime). Perhaps lower ? 
+sleep 600 # in measure we have -t 10 (so 10 minutes maximum runtime). Perhaps lower ? 
 #**************************************************************************
 
 # Get the Results
+kubectl get jobs > all_jobs.txt
 cd /home/Soufiane/Desktop/CloudComputing/CCA/part3/
 sleep 30
 gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf-dynamic/measure.txt "./outputs/measure.txt" --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing

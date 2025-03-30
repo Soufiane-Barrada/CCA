@@ -14,7 +14,7 @@ spec:
         command: ["/bin/sh"]
         args: 
           - "-c"
-          - "taskset -c "${FERRET_CORES}" ./run -a run -S parsec -p ferret -i native -n "${FERRET_THREADS}""
+          - "taskset -c ${FERRET_CORES} ./run -a run -S parsec -p ferret -i native -n ${FERRET_THREADS}"
       restartPolicy: Never
       nodeSelector:
         cca-project-nodetype: "${FERRET_NODE}"

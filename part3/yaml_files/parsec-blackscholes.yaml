@@ -14,7 +14,7 @@ spec:
         command: ["/bin/sh"]
         args:
           - "-c"
-          - "taskset -c "${BLACKSCHOLES_CORES}" ./run -a run -S parsec -p blackscholes -i native -n "${BLACKSCHOLES_THREADS}""
+          - "taskset -c ${BLACKSCHOLES_CORES} ./run -a run -S parsec -p blackscholes -i native -n ${BLACKSCHOLES_THREADS}"
       restartPolicy: Never
       nodeSelector:
         cca-project-nodetype: "${BLACKSCHOLES_NODE}"

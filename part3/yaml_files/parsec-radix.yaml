@@ -14,7 +14,7 @@ spec:
         command: ["/bin/sh"]
         args: 
           - "-c"
-          - "taskset -c "${RADIX_CORES}" ./run -a run -S splash2x -p radix -i native -n "$RADIX_THREADS""
+          - "taskset -c ${RADIX_CORES} ./run -a run -S splash2x -p radix -i native -n $RADIX_THREADS"
       restartPolicy: Never
       nodeSelector:
         cca-project-nodetype: "${RADIX_NODE}"
