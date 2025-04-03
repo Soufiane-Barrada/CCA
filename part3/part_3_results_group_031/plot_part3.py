@@ -7,9 +7,10 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 import re
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
-# Map job names to consistent colors
+
+# Define a color mapping for different job names to ensure consistent visualization
 job_colors = {
     'blackscholes': '#CCA000',
     'canneal': '#CCCCAA',
@@ -20,7 +21,9 @@ job_colors = {
     'vips': '#CC0A00',
     'memcached': '#1f77b4'
 }
+
 def extract_core_count(node_name):
+    """Extract the number of cores from a node name using regex"""
     match = re.search(r'(\d+)core', node_name)
     return int(match.group(1)) if match else 1
 
@@ -109,106 +112,73 @@ def parse_results_json(path):
     return jobs
 
 
-
 def plot_results(latency_data, job_data, run_label="run"):
     min_start_time = min(job['start'] for job in job_data if job['name'] != 'memcached')
     max_end_time = max(job['start'] for job in job_data if job['name'] != 'memcached')
-    print("max_end_time", max_end_time)
     min_start = latency_data['ts_start'][0]
 
-    print(min_start)
-    print(".........start.............")
-    print(latency_data['ts_start'])
-    print("..........start - min............")
-    a = latency_data['ts_start']- int(min_start_time)
-    print(a)
-    print("..........end............")
-    print(latency_data['ts_end'][1])
-    print("..........end - start............")
-    print(latency_data['ts_end']-latency_data['ts_start'])
-
-    # 1. Top plot: memcached p95 latency
-    # plt.figure()
-    # plt.bar( (latency_data['ts_start']-min_start) / 1000, height=latency_data['p95'], width= (latency_data['ts_end']- latency_data['ts_start']) / 1000)
-    # plt.show()
-    
     # Set up plots
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), gridspec_kw={'height_ratios': [1, 2]})
     fig.suptitle("Memcached p95 latency and batch jobs allocation (run 1)", fontsize=16)
 
     # --- Plot 1: Memcached p95 latency ---
-    ax1.bar( (latency_data['ts_start']-min_start) / 1000 , latency_data['p95'], width= (latency_data['ts_end']- latency_data['ts_start']) / 1000, align='edge', color=job_colors['memcached'])
+    ax1.bar(
+        (latency_data['ts_start'] - min_start) / 1000,
+        latency_data['p95'],
+        width=(latency_data['ts_end'] - latency_data['ts_start']) / 1000,
+        align='edge',
+        color=job_colors['memcached']
+    )
     ax1.set_ylabel("Memcached p95 latency [ms]")
     ax1.set_xlabel("time [s]")
-    
-    xticks = sorted(set( ((latency_data['ts_start']-min_start) / 1000 ).tolist() + ((latency_data['ts_end']- latency_data['ts_start']) / 1000).tolist()))
-    ax1.set_xticks(xticks)
-    ax1.set_xticklabels([f"{x:.0f}" for x in xticks], rotation=45)
-    # ax1.set_xticks(xticks[::2]) 
-    
-    # 2. Bottom plot: job bars per core
-    core_map = {}  # node-core string -> y-position
-    y_offset = 0
-    yticks, ytick_labels = [], []
-    print(".........2nd PLOT.............")
-    for job in job_data:
-        job_name = job['name'].replace("parsec-", "")
-        print(".........job name.............")
-        print(job_name)
-        color = job_colors.get(job_name, "gray")
-        print(".........color.............")
-        print(color)
-        if job_name != 'memcached':
-            start = (job['start'] - min_start_time) / 1000
-            print(".........start.............")
-            print(start)
-            #if job_name != 'memcached':
-            end = (job['end'] - min_start_time) / 1000
-            print(".........start.............")
-            print(end)
-        # else:
-        #     end = (max_end_time - min_start_time) /1000
-        #     start = 0
-        node = job['node']
-        cores = job['cores']
-        
-        # Add vertical lines for job starts/ends
-        ax1.axvline(start, color=color, linestyle='-', linewidth=0.7)
-        ax1.axvline(end, color=color, linestyle='-', linewidth=0.7)
-        #ax2.axvline(start, color=color, linestyle='-', linewidth=0.7)
-        #ax2.axvline(end, color=color, linestyle='-', linewidth=0.7)
-    
-    
+    xticks = sorted(set(
+        ((latency_data['ts_start'] - min_start) / 1000).tolist() +
+        ((latency_data['ts_end'] - min_start) / 1000).tolist()
+    ))
+
+    #ax1.set_xticks(xticks)
+    #ax1.set_xticklabels([f"{x:.0f}" for x in xticks], rotation=90)
+    for label in ax1.get_xticklabels():
+        label.set_color('gray')
+
     # --- Plot 2: Gantt-style job-core allocation ---
+
+    # Step 1: Build and sort core labels
+    all_core_entries = set()
+    for job in job_data:
+        for core in job['cores']:
+            label = f"{job['node']}({core})"
+            all_core_entries.add((job['node'], core, label))
+    sorted_core_entries = sorted(all_core_entries, key=lambda x: (x[0], x[1]))
+
+    core_map = OrderedDict()
     yticks = []
     yticklabels = []
-    core_map = {}
-    y_offset = 0
+    for y_offset, (_, _, label) in enumerate(sorted_core_entries):
+        core_map[label] = y_offset
+        yticks.append(y_offset)
+        yticklabels.append(label)
 
+    # Step 2: Plot job bars
     for job in job_data:
         job_name = job['name'].replace("parsec-", "")
         color = job_colors.get(job_name, "black")
         if job_name != 'memcached':
             start = (job['start'] - min_start_time) / 1000
             duration = (job['end'] - job['start']) / 1000
+            ax1.axvline(start, color=color, linestyle='-', linewidth=1)
+            ax1.axvline(start + duration, color=color, linestyle='-', linewidth=1)
+            #ax2.axvline(start, color=color, linestyle='-', linewidth=0.9)
+            #ax2.axvline(start + duration, color=color, linestyle='-', linewidth=0.9)
         else:
             start = -10
             duration = 200
-            
 
         for core in job['cores']:
             label = f"{job['node']}({core})"
-            if label not in core_map:
-                core_map[label] = y_offset
-                yticks.append(y_offset)
-                yticklabels.append(label)
-                y_offset += 1
-        
             y = core_map[label]
             ax2.barh(y, duration, left=start, height=0.8, color=color, edgecolor='black')
 
-    
-    # Align x-axis of both subplots
     ax2.set_xlim(ax1.get_xlim())
     ax2.set_yticks(yticks)
     ax2.set_yticklabels(yticklabels)
@@ -216,12 +186,15 @@ def plot_results(latency_data, job_data, run_label="run"):
     # Legend
     patches = [mpatches.Patch(color=color, label=name) for name, color in job_colors.items()]
     ax2.legend(handles=patches, bbox_to_anchor=(1.01, 1), loc='upper left')
+    
+    # Add grid lines
+    ax1.grid(True, which='both', axis='both', linestyle='--', linewidth=0.5)
+    ax2.grid(True, which='both', axis='both', linestyle='--', linewidth=0.5)
 
     plt.tight_layout()
     plt.savefig("run1_combined.png", dpi=300)
     plt.show()
-    
-    
+ 
 
 if __name__ == "__main__":
     files_names = sys.argv[1:]

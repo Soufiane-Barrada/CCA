@@ -5,19 +5,19 @@ export PROJECT=`gcloud config get-value project`
 cd /Users/ccylmichel/Desktop/CCA/
 # Set desired node and resource parameters
 export MEMCACHED_NODE="node-a-2core"
-export MEMCACHED_CORES="0-1"
+export MEMCACHED_CORES="0"
 export MEMCACHED_THREADS=2
 
 export BLACKSCHOLES_NODE="node-b-2core"
 export BLACKSCHOLES_CORES="0"
 export BLACKSCHOLES_THREADS=1
 
-export RADIX_NODE="node-b-2core"
+export RADIX_NODE="node-a-2core"
 export RADIX_CORES="1"
-export RADIX_THREADS=1
+export RADIX_THREADS=8
 
-export CANNEAL_NODE="node-c-4core"
-export CANNEAL_CORES="0-1"
+export CANNEAL_NODE="node-b-2core"
+export CANNEAL_CORES="1"
 export CANNEAL_THREADS=2
 
 export DEDUP_NODE="node-c-4core"
@@ -25,16 +25,16 @@ export DEDUP_CORES="2-3"
 export DEDUP_THREADS=2
 
 export FERRET_NODE="node-d-4core"
-export FERRET_CORES="0"
-export FERRET_THREADS=1
+export FERRET_CORES="0-1"
+export FERRET_THREADS=4
 
 export FREQMINE_NODE="node-d-4core"
-export FREQMINE_CORES="1"
-export FREQMINE_THREADS=1
+export FREQMINE_CORES="2-3"
+export FREQMINE_THREADS=4
 
-export VIPS_NODE="node-d-4core"
-export VIPS_CORES="2"
-export VIPS_THREADS=1
+export VIPS_NODE="node-c-4core"
+export VIPS_CORES="0-1"
+export VIPS_THREADS=2
 
 envsubst < ./CCA/part3/yaml_files/memcache.yaml > ./CCA/part3/yaml_files/memcache-sub.yaml
 envsubst < ./CCA/part3/yaml_files/parsec-blackscholes.yaml > ./CCA/part3/yaml_files/parsec-blackscholes-sub.yaml
@@ -146,8 +146,8 @@ kubectl get jobs > all_jobs.txt
 #cd /home/Soufiane/Desktop/CloudComputing/CCA/part3/
 cd /Users/ccylmichel/Desktop/CCA/CCA/part3 
 sleep 30
-gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf-dynamic/measure.txt "./part_3_results_group_031/measure1.txt" --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
-kubectl get pods -o json > ./part_3_results_group_031/results1.json
-python3 get_time.py ./part_3_results_group_031/results.json > ./part_3_results_group_031/time1.txt
+gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf-dynamic/measure.txt "./part_3_results_group_031/measure.txt" --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
+kubectl get pods -o json > ./part_3_results_group_031/results.json
+python3 get_time.py ./part_3_results_group_031/results.json > ./part_3_results_group_031/time.txt
 
 

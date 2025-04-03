@@ -14,7 +14,7 @@ spec:
         command: ["/bin/sh"]
         args: 
           - "-c"
-          - "taskset -c 1 ./run -a run -S splash2x -p radix -i native -n 1"
+          - "taskset -c 1 ./run -a run -S splash2x -p radix -i native -n 8"
       restartPolicy: Never
       nodeSelector:
-        cca-project-nodetype: "node-b-2core"
+        cca-project-nodetype: "node-a-2core"

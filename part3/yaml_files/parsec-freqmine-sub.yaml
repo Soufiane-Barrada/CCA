@@ -14,7 +14,7 @@ spec:
         command: ["/bin/sh"]
         args: 
           - "-c"
-          - "taskset -c 1 ./run -a run -S parsec -p freqmine -i native -n 1"
+          - "taskset -c 2-3 ./run -a run -S parsec -p freqmine -i native -n 4"
       restartPolicy: Never
       nodeSelector:
         cca-project-nodetype: "node-d-4core"
