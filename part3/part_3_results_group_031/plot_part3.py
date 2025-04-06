@@ -116,6 +116,12 @@ def plot_results(latency_data, job_data, run_label="run"):
     min_start_time = min(job['start'] for job in job_data if job['name'] != 'memcached')
     max_end_time = max(job['start'] for job in job_data if job['name'] != 'memcached')
     min_start = latency_data['ts_start'][0]
+    #min_start1 =  min(latency['ts_start'] for latency in latency_data )
+    #print(("----------------MIN START 1", min_start1))
+    print(("----------------MIN START ", min_start))
+    print(("----------------LATENCY DATA ", latency_data['ts_start']))
+    max_ts_start = latency_data['ts_start'].max()
+    print("Max ts_start:", max_ts_start)
 
     # Set up plots
     fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12, 8), gridspec_kw={'height_ratios': [1, 2]})
@@ -124,7 +130,7 @@ def plot_results(latency_data, job_data, run_label="run"):
     # --- Plot 1: Memcached p95 latency ---
     ax1.bar(
         (latency_data['ts_start'] - min_start) / 1000,
-        latency_data['p95'],
+        latency_data['p95'] / 1000,
         width=(latency_data['ts_end'] - latency_data['ts_start']) / 1000,
         align='edge',
         color=job_colors['memcached']
@@ -135,11 +141,13 @@ def plot_results(latency_data, job_data, run_label="run"):
         ((latency_data['ts_start'] - min_start) / 1000).tolist() +
         ((latency_data['ts_end'] - min_start) / 1000).tolist()
     ))
-
+    
+    ax1.set_xlim(-10, ((max_ts_start - min_start) / 1000)+20)
+    ax1.set_ylim(0, 1)
     #ax1.set_xticks(xticks)
     #ax1.set_xticklabels([f"{x:.0f}" for x in xticks], rotation=90)
-    for label in ax1.get_xticklabels():
-        label.set_color('gray')
+    # for label in ax1.get_xticklabels():
+    #     label.set_color('gray')
 
     # --- Plot 2: Gantt-style job-core allocation ---
 
@@ -171,8 +179,8 @@ def plot_results(latency_data, job_data, run_label="run"):
             #ax2.axvline(start, color=color, linestyle='-', linewidth=0.9)
             #ax2.axvline(start + duration, color=color, linestyle='-', linewidth=0.9)
         else:
-            start = -10
-            duration = 200
+            start = 0
+            duration = ((max_ts_start - min_start) / 1000)
 
         for core in job['cores']:
             label = f"{job['node']}({core})"
@@ -206,7 +214,7 @@ if __name__ == "__main__":
     job_data = parse_results_json(files_names[1])
     print("------------------LATENCY DATA------------------------")
     print(latency_data)
-    print("------------------JOB DATA------------------------")
+    print("---------------------JOB DATA------------------------")
     print(job_data)
     
     #plot_results1(latency_data, job_data)
