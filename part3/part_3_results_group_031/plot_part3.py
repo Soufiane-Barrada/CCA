@@ -91,6 +91,7 @@ def parse_results_json(path):
             #add memcached to jobs
             start_str = container['state']['running']['startedAt'] 
             tasket_core = item['spec']['containers'][0]['args'][1]
+            node = item['spec']['nodeSelector']['cca-project-nodetype']
             match = re.search(r'taskset\s+-c\s+([^\s]+)', tasket_core)
             start_time = datetime.fromisoformat(start_str).timestamp()*1000
             if match:
@@ -102,11 +103,13 @@ def parse_results_json(path):
                 cores = extract_core_count(node)
                 cores = list(range(cores))
             try:
+                print("memcached job node", node, "memcached job cores", cores)
                 jobs.append({
                     "name": name,
                     "node": node,
                     "cores": cores
                 })
+                
             except Exception as e:
                 continue
     return jobs
@@ -142,7 +145,7 @@ def plot_results(latency_data, job_data, run_label="run"):
         ((latency_data['ts_end'] - min_start) / 1000).tolist()
     ))
     
-    ax1.set_xlim(-10, ((max_ts_start - min_start) / 1000)+20)
+    ax1.set_xlim(-10, 300)
     ax1.set_ylim(0, 1)
     #ax1.set_xticks(xticks)
     #ax1.set_xticklabels([f"{x:.0f}" for x in xticks], rotation=90)
