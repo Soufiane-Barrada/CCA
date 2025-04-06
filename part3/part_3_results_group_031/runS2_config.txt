@@ -1,0 +1,31 @@
+export MEMCACHED_NODE="node-b-2core"
+export MEMCACHED_CORES="0-1"
+export MEMCACHED_THREADS=2
+
+export BLACKSCHOLES_NODE="node-d-4core"
+export BLACKSCHOLES_CORES="0-1"
+export BLACKSCHOLES_THREADS=2
+
+export RADIX_NODE="node-d-4core"
+export RADIX_CORES="0-1"
+export RADIX_THREADS=2
+
+export CANNEAL_NODE="node-a-2core"
+export CANNEAL_CORES="0-1"
+export CANNEAL_THREADS=4
+
+export DEDUP_NODE="node-c-4core"
+export DEDUP_CORES="3"
+export DEDUP_THREADS=2
+
+export FERRET_NODE="node-d-4core"
+export FERRET_CORES="2-3"
+export FERRET_THREADS=4
+
+export FREQMINE_NODE="node-c-4core"
+export FREQMINE_CORES="0-1"
+export FREQMINE_THREADS=4
+
+export VIPS_NODE="node-c-4core"
+export VIPS_CORES="2"
+export VIPS_THREADS=2
