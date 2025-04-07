@@ -19,7 +19,7 @@ export RADIX_THREADS=2
 
 export CANNEAL_NODE="node-a-2core"
 export CANNEAL_CORES="0-1"
-export CANNEAL_THREADS=4
+export CANNEAL_THREADS=2
 
 export DEDUP_NODE="node-c-4core"
 export DEDUP_CORES="3"
@@ -27,11 +27,11 @@ export DEDUP_THREADS=1
 
 export FERRET_NODE="node-d-4core"
 export FERRET_CORES="2-3"
-export FERRET_THREADS=4
+export FERRET_THREADS=2
 
 export FREQMINE_NODE="node-c-4core"
 export FREQMINE_CORES="0-2"
-export FREQMINE_THREADS=4
+export FREQMINE_THREADS=3
 
 export VIPS_NODE="node-c-4core"
 export VIPS_CORES="3"
