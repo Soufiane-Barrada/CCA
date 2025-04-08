@@ -2,8 +2,8 @@
 
 set -e
 export PROJECT=`gcloud config get-value project`
-cd /home/Soufiane/Desktop/CloudComputing/
-
+#cd /home/Soufiane/Desktop/CloudComputing/
+cd /Users/ccylmichel/Desktop/CCA/
 # Set desired node and resource parameters
 export MEMCACHED_NODE="node-b-2core"
 export MEMCACHED_CORES="0-1"
@@ -19,23 +19,23 @@ export RADIX_THREADS=2
 
 export CANNEAL_NODE="node-a-2core"
 export CANNEAL_CORES="0-1"
-export CANNEAL_THREADS=2
+export CANNEAL_THREADS=4
 
 export DEDUP_NODE="node-c-4core"
 export DEDUP_CORES="3"
-export DEDUP_THREADS=1
+export DEDUP_THREADS=2
 
 export FERRET_NODE="node-d-4core"
 export FERRET_CORES="2-3"
-export FERRET_THREADS=2
+export FERRET_THREADS=4
 
 export FREQMINE_NODE="node-c-4core"
-export FREQMINE_CORES="0-2"
-export FREQMINE_THREADS=3
+export FREQMINE_CORES="0-1"
+export FREQMINE_THREADS=4
 
 export VIPS_NODE="node-c-4core"
-export VIPS_CORES="3"
-export VIPS_THREADS=1
+export VIPS_CORES="2"
+export VIPS_THREADS=2
 #*******************************
 
 envsubst < ./CCA/part3/yaml_files/memcache.yaml > ./CCA/part3/yaml_files/memcache-sub.yaml
@@ -105,7 +105,8 @@ sleep 5
 
 # Get the Results
 kubectl get jobs > all_jobs.txt
-cd /home/Soufiane/Desktop/CloudComputing/CCA/part3/
+#cd /home/Soufiane/Desktop/CloudComputing/CCA/part3/
+cd /Users/ccylmichel/Desktop/CCA/CCA/part3 
 sleep 30
 gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf-dynamic/measure.txt "./part_3_results_group_031/measure.txt" --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
 kubectl get pods -o json > ./part_3_results_group_031/results.json

@@ -1,8 +1,8 @@
 
 set -e
 export PROJECT=`gcloud config get-value project`
-cd /home/Soufiane/Desktop/CloudComputing/
-#cd /Users/ccylmichel/Desktop/CCA/
+#cd /home/Soufiane/Desktop/CloudComputing/
+cd /Users/ccylmichel/Desktop/CCA/
 
 # Set desired node and resource parameters
 export MEMCACHED_NODE="node-b-2core"
@@ -51,9 +51,28 @@ envsubst < ./CCA/part3/yaml_files/parsec-vips.yaml > ./CCA/part3/yaml_files/pars
 
 
 # Create the Kubernetes cluster
-kops create -f cloud-comp-arch-project/part3.yaml
+#kops create -f cloud-comp-arch-project/part3.yaml
+
+# Deploy it
 kops update cluster --name part3.k8s.local --yes --admin
+kops export kubecfg --name part3.k8s.local --admin
+
+# 2. Wait for API server to be ready before patching
+echo "⏳ Waiting for API server to be ready..."
+until kubectl get nodes &> /dev/null; do
+  sleep 5
+done
+
+# Patch cloud-controller-manager to fix broken default image
+kubectl -n kube-system patch daemonset cloud-controller-manager \
+  --type='json' \
+  -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value": "gcr.io/k8s-staging-cloud-provider-gcp/cloud-controller-manager@sha256:e125f4e6792978125546e64279a13de18fdf6b704edfec8400cac1254d3adf88"}]'
+
+echo "✅ Patched cloud-controller-manager image to working version"
+
 kops validate cluster --wait 10m
+
+
 kubectl get nodes -o wide > cluster_nodes_info.txt 
 
 # Parse the cluster_nodes_info.txt to extract needed data
@@ -155,8 +174,8 @@ sleep 5
 
 # Get the Results
 kubectl get jobs > all_jobs.txt
-cd /home/Soufiane/Desktop/CloudComputing/CCA/part3/
-#cd /Users/ccylmichel/Desktop/CCA/CCA/part3 
+#cd /home/Soufiane/Desktop/CloudComputing/CCA/part3/
+cd /Users/ccylmichel/Desktop/CCA/CCA/part3 
 sleep 30
 gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf-dynamic/measure.txt "./part_3_results_group_031/measure.txt" --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
 kubectl get pods -o json > ./part_3_results_group_031/results.json
