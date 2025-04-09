@@ -30,11 +30,11 @@ export FERRET_CORES="2-3"
 export FERRET_THREADS=4
 
 export FREQMINE_NODE="node-c-4core"
-export FREQMINE_CORES="0-1"
+export FREQMINE_CORES="0-2"
 export FREQMINE_THREADS=4
 
 export VIPS_NODE="node-c-4core"
-export VIPS_CORES="2"
+export VIPS_CORES="3"
 export VIPS_THREADS=2
 
 envsubst < ./CCA/part3/yaml_files/memcache.yaml > ./CCA/part3/yaml_files/memcache-sub.yaml
@@ -51,17 +51,9 @@ envsubst < ./CCA/part3/yaml_files/parsec-vips.yaml > ./CCA/part3/yaml_files/pars
 
 
 # Create the Kubernetes cluster
-#kops create -f cloud-comp-arch-project/part3.yaml
-
+kops create -f cloud-comp-arch-project/part3.yaml
 # Deploy it
 kops update cluster --name part3.k8s.local --yes --admin
-kops export kubecfg --name part3.k8s.local --admin
-
-# 2. Wait for API server to be ready before patching
-echo "⏳ Waiting for API server to be ready..."
-until kubectl get nodes &> /dev/null; do
-  sleep 5
-done
 
 # Patch cloud-controller-manager to fix broken default image
 kubectl -n kube-system patch daemonset cloud-controller-manager \
@@ -71,7 +63,6 @@ kubectl -n kube-system patch daemonset cloud-controller-manager \
 echo "✅ Patched cloud-controller-manager image to working version"
 
 kops validate cluster --wait 10m
-
 
 kubectl get nodes -o wide > cluster_nodes_info.txt 
 

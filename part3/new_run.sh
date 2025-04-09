@@ -30,11 +30,11 @@ export FERRET_CORES="2-3"
 export FERRET_THREADS=4
 
 export FREQMINE_NODE="node-c-4core"
-export FREQMINE_CORES="0-1"
+export FREQMINE_CORES="0-2"
 export FREQMINE_THREADS=4
 
 export VIPS_NODE="node-c-4core"
-export VIPS_CORES="2"
+export VIPS_CORES="3"
 export VIPS_THREADS=2
 #*******************************
 
