@@ -9,24 +9,24 @@ export MEMCACHED_NODE="node-b-2core"
 export MEMCACHED_CORES="0-1"
 export MEMCACHED_THREADS=2
 
-export BLACKSCHOLES_NODE="node-d-4core"
-export BLACKSCHOLES_CORES="0-1"
-export BLACKSCHOLES_THREADS=2
+export BLACKSCHOLES_NODE="node-c-4core"
+export BLACKSCHOLES_CORES="0-3"
+export BLACKSCHOLES_THREADS=4
 
-export RADIX_NODE="node-d-4core"
+export RADIX_NODE="node-a-2core"
 export RADIX_CORES="0-1"
 export RADIX_THREADS=2
 
-export CANNEAL_NODE="node-a-2core"
-export CANNEAL_CORES="0-1"
+export CANNEAL_NODE="node-d-4core"
+export CANNEAL_CORES="0-3"
 export CANNEAL_THREADS=4
 
-export DEDUP_NODE="node-c-4core"
-export DEDUP_CORES="3"
+export DEDUP_NODE="node-a-2core"
+export DEDUP_CORES="0-1"
 export DEDUP_THREADS=2
 
-export FERRET_NODE="node-d-4core"
-export FERRET_CORES="2-3"
+export FERRET_NODE="node-c-4core"
+export FERRET_CORES="0-3"
 export FERRET_THREADS=4
 
 export FREQMINE_NODE="node-c-4core"
@@ -129,23 +129,38 @@ gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE 
 
 #***************************************************************************
 
-# Run the PARSEC batch jobs
-kubectl create -f ./CCA/part3/yaml_files/parsec-blackscholes-sub.yaml &
-#maybe sleep between jobs 
-kubectl create -f ./CCA/part3/yaml_files/parsec-canneal-sub.yaml &
-kubectl create -f ./CCA/part3/yaml_files/parsec-dedup-sub.yaml &
-kubectl create -f ./CCA/part3/yaml_files/parsec-ferret-sub.yaml &
-kubectl create -f ./CCA/part3/yaml_files/parsec-freqmine-sub.yaml &
+# === node-a jobs ===
 (
-  until kubectl get job parsec-blackscholes >/dev/null 2>&1; do
-    sleep 1
-  done
-  kubectl wait --for=condition=complete --timeout=600s job/parsec-blackscholes && \
-  kubectl create -f ./CCA/part3/yaml_files/parsec-radix-sub.yaml
-) &
-kubectl create -f ./CCA/part3/yaml_files/parsec-vips-sub.yaml &
+  kubectl create -f ./CCA/part3/yaml_files/parsec-vips-sub.yaml
+  kubectl wait --for=condition=complete --timeout=600s job/parsec-vips
 
-sleep 600 #  10 mins
+  kubectl create -f ./CCA/part3/yaml_files/parsec-dedup-sub.yaml
+  kubectl wait --for=condition=complete --timeout=600s job/parsec-dedup
+
+  kubectl create -f ./CCA/part3/yaml_files/parsec-radix-sub.yaml
+  kubectl wait --for=condition=complete --timeout=600s job/parsec-radix
+) &
+
+# === node-c jobs ===
+(
+  kubectl create -f ./CCA/part3/yaml_files/parsec-ferret-sub.yaml
+  kubectl wait --for=condition=complete --timeout=600s job/parsec-ferret
+
+  kubectl create -f ./CCA/part3/yaml_files/parsec-blackscholes-sub.yaml
+  kubectl wait --for=condition=complete --timeout=600s job/parsec-blackscholes
+) &
+
+# === node-d jobs ===
+(
+  kubectl create -f ./CCA/part3/yaml_files/parsec-canneal-sub.yaml
+  kubectl wait --for=condition=complete --timeout=600s job/parsec-canneal
+
+  kubectl create -f ./CCA/part3/yaml_files/parsec-freqmine-sub.yaml
+  kubectl wait --for=condition=complete --timeout=600s job/parsec-freqmine
+) &
+
+
+sleep 300 #  10 mins
 #**************************************************************************
 
 #Kill the processes

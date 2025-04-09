@@ -17,4 +17,4 @@ spec:
           - "taskset -c 3 ./run -a run -S parsec -p dedup -i native -n 2"
       restartPolicy: Never
       nodeSelector:
-        cca-project-nodetype: "node-c-4core"
+        cca-project-nodetype: "node-a-2core"
