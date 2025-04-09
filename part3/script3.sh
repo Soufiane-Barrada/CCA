@@ -52,18 +52,8 @@ envsubst < ./CCA/part3/yaml_files/parsec-vips.yaml > ./CCA/part3/yaml_files/pars
 
 # Create the Kubernetes cluster
 kops create -f cloud-comp-arch-project/part3.yaml
-# Deploy it
 kops update cluster --name part3.k8s.local --yes --admin
-
-# Patch cloud-controller-manager to fix broken default image
-kubectl -n kube-system patch daemonset cloud-controller-manager \
-  --type='json' \
-  -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value": "gcr.io/k8s-staging-cloud-provider-gcp/cloud-controller-manager@sha256:e125f4e6792978125546e64279a13de18fdf6b704edfec8400cac1254d3adf88"}]'
-
-echo "✅ Patched cloud-controller-manager image to working version"
-
 kops validate cluster --wait 10m
-
 kubectl get nodes -o wide > cluster_nodes_info.txt 
 
 # Parse the cluster_nodes_info.txt to extract needed data
@@ -88,6 +78,7 @@ export NODE_A="$node_a"
 export NODE_B="$node_b"
 export NODE_C="$node_c"
 export NODE_D="$node_d"
+
 
 # Write the variables into nodes_info.txt
 cat <<EOF > nodes_info.txt
