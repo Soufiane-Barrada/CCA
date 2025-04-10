@@ -14,7 +14,7 @@ spec:
         command: ["/bin/sh"]
         args: 
           - "-c"
-          - "taskset -c 3 ./run -a run -S parsec -p vips -i native -n 2"
+          - "taskset -c 1 ./run -a run -S parsec -p vips -i native -n 1"
       restartPolicy: Never
       nodeSelector:
-        cca-project-nodetype: "node-a-2core"
+        cca-project-nodetype: "node-b-2core"

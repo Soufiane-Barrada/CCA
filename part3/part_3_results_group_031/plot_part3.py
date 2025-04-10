@@ -203,7 +203,7 @@ def plot_results(latency_data, job_data, run_label="run"):
     ax2.grid(True, which='both', axis='both', linestyle='--', linewidth=0.5)
 
     plt.tight_layout()
-    plt.savefig("runS4_combined.png", dpi=300)
+    plt.savefig("runS8_combined.png", dpi=300)
     plt.show()
  
 

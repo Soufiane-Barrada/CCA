@@ -17,4 +17,4 @@ spec:
           - "taskset -c 0-3 ./run -a run -S parsec -p canneal -i native -n 4"
       restartPolicy: Never
       nodeSelector:
-        cca-project-nodetype: "node-d-4core"
+        cca-project-nodetype: "node-c-4core"
