@@ -92,3 +92,22 @@ cd memcache-perf-dynamic &&
   --noload -T 8 -C 8 -D 4 -Q 1000 -c 8 -t 10 \
   --qps_interval 2 --qps_min 5000 --qps_max 180000
 "
+
+# -- give controller to memcached VM 
+
+echo "[Matteo Log] copying controller scripts to $MEMCACHED_VM"
+
+gcloud compute scp $CONTROLLER_SCRIPT $LOGGER_SCRIPT ubuntu@$MEMCACHED_VM:~ --zone=$ZONE
+
+echo "[Matteo Log] setting up python dependencies and docker on $MEMCACHED_VM"
+
+gcloud compute ssh ubuntu@$MEMCACHED_VM --zone=$ZONE --command "
+  sudo apt update &&
+  sudo apt install -y python3-pip docker.io &&
+  sudo usermod -aG docker ubuntu &&
+  pip3 install psutil &&
+  echo '[Matteo Log] Dependencies installed!'
+"
+
+echo "[Matteo Log] launching controller on $MEMCACHED_VM"
+gcloud compute ssh ubuntu@$MEMCACHED_VM --zone=$ZONE --command "python3 controller.py"
