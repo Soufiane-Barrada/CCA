@@ -1,8 +1,8 @@
 
 set -e
 export PROJECT=`gcloud config get-value project`
-cd /home/Soufiane/Desktop/CloudComputing/
-#cd /Users/ccylmichel/Desktop/CCA/
+#cd /home/Soufiane/Desktop/CloudComputing/
+cd /Users/ccylmichel/Desktop/CCA/
 
 # Set desired node and resource parameters
 export MEMCACHED_NODE="node-b-2core"
@@ -169,8 +169,8 @@ sleep 5
 
 # Get the Results
 kubectl get jobs > all_jobs.txt
-cd /home/Soufiane/Desktop/CloudComputing/CCA/part3/
-#cd /Users/ccylmichel/Desktop/CCA/CCA/part3 
+#cd /home/Soufiane/Desktop/CloudComputing/CCA/part3/
+cd /Users/ccylmichel/Desktop/CCA/CCA/part3 
 sleep 30
 gcloud compute scp ubuntu@$CLIENT_MEASURE:~/memcache-perf-dynamic/measure.txt "./part_3_results_group_031/measure.txt" --zone europe-west1-b --ssh-key-file ~/.ssh/cloud-computing
 kubectl get pods -o json > ./part_3_results_group_031/results.json
