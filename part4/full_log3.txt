@@ -1,0 +1,123 @@
++ ZONE=europe-west1-b
++ LOG_DIR=./part4_q1_logs
++ mkdir -p ./part4_q1_logs
++ ./create_cluster.sh
+I0416 17:52:45.980290   58045 network.go:109] scanning regions for subnetwork CIDR allocations
+I0416 17:52:46.107506   58045 network.go:238] assigned 10.0.32.0/20 to subnet europe-west1
+
+Created cluster/part4.k8s.local
+Created instancegroup/master-europe-west1-b
+Created instancegroup/memcache-server
+Created instancegroup/client-measure
+Created instancegroup/client-agent
+
+To deploy these resources, run: kops update cluster --name part4.k8s.local --yes
+
+W0416 17:52:52.223336   58046 update_cluster.go:356] error checking control plane running version, assuming no k8s upgrade in progress: cannot load kubecfg settings for "part4.k8s.local": context "part4.k8s.local" does not exist
+
+*********************************************************************************
+
+A new kubernetes version is available: 1.31.7
+Upgrading is recommended (try kops upgrade cluster)
+
+More information: https://github.com/kubernetes/kops/blob/master/permalinks/upgrade_k8s.md#1.31.7
+
+*********************************************************************************
+
+W0416 17:53:08.194757   58046 external_access.go:39] TODO: Harmonize gcemodel ExternalAccessModelBuilder with awsmodel
+W0416 17:53:08.195404   58046 firewall.go:41] TODO: Harmonize gcemodel with awsmodel for firewall - GCE model is way too open
+W0416 17:53:08.196173   58046 context.go:147] using legacy spec.cloudProvider.gce.serviceAccount="default" setting
+W0416 17:53:08.196291   58046 context.go:147] using legacy spec.cloudProvider.gce.serviceAccount="default" setting
+W0416 17:53:08.196457   58046 autoscalinggroup.go:156] enabling storage-rw for etcd backups
+W0416 17:53:08.196481   58046 context.go:147] using legacy spec.cloudProvider.gce.serviceAccount="default" setting
+W0416 17:53:08.196538   58046 context.go:147] using legacy spec.cloudProvider.gce.serviceAccount="default" setting
+I0416 17:53:08.199875   58046 executor.go:113] Tasks: 0 done / 82 total; 39 can run
+W0416 17:53:08.338002   58046 vfs_keystorereader.go:163] CA private key was not found
+I0416 17:53:08.471497   58046 keypair.go:226] Issuing new certificate: "etcd-peers-ca-events"
+I0416 17:53:08.471503   58046 keypair.go:226] Issuing new certificate: "etcd-manager-ca-main"
+I0416 17:53:08.474961   58046 keypair.go:226] Issuing new certificate: "apiserver-aggregator-ca"
+I0416 17:53:08.476838   58046 keypair.go:226] Issuing new certificate: "etcd-peers-ca-main"
+I0416 17:53:08.478569   58046 keypair.go:226] Issuing new certificate: "etcd-manager-ca-events"
+I0416 17:53:08.575487   58046 keypair.go:226] Issuing new certificate: "etcd-clients-ca"
+W0416 17:53:08.597377   58046 vfs_keystorereader.go:163] CA private key was not found
+I0416 17:53:08.722440   58046 keypair.go:226] Issuing new certificate: "kubernetes-ca"
+I0416 17:53:08.727246   58046 keypair.go:226] Issuing new certificate: "service-account"
+I0416 17:53:21.102311   58046 executor.go:113] Tasks: 39 done / 82 total; 21 can run
+W0416 17:53:24.604127   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (9m56s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:53:24.604201   58046 executor.go:113] Tasks: 59 done / 82 total; 3 can run
+W0416 17:53:28.109791   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (9m52s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+W0416 17:53:28.109855   58046 executor.go:141] error running task "ForwardingRule/api-part4-k8s-local" (9m56s remaining to succeed): error creating ForwardingRule "api-part4-k8s-local": googleapi: Error 400: The resource 'projects/cca-eth-2025-group-031/regions/europe-west1/targetPools/api-part4-k8s-local' is not ready, resourceNotReady
+I0416 17:53:28.109904   58046 executor.go:113] Tasks: 60 done / 82 total; 2 can run
+W0416 17:53:34.822168   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (9m46s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:53:34.822209   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:53:34.930070   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (9m46s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:53:34.930131   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:53:44.930618   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:53:45.049128   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (9m36s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:53:45.049182   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:53:55.050487   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:53:55.609629   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (9m25s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:53:55.609721   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:54:05.611056   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:54:05.754366   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (9m15s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:54:05.754409   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:54:15.755715   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:54:15.876340   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (9m5s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:54:15.876388   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:54:25.877933   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:54:25.965833   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (8m55s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:54:25.965886   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:54:35.966510   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:54:36.128185   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (8m44s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:54:36.128240   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:54:46.129595   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:54:46.270935   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (8m34s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:54:46.270967   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:54:56.271750   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:54:56.412471   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (8m24s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:54:56.412517   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:55:06.413839   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:55:06.571709   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (8m14s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:55:06.571759   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:55:16.573074   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:55:16.684188   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (8m4s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:55:16.684253   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:55:26.685589   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:55:26.810124   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (7m54s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:55:26.810175   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:55:36.811513   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:55:36.964510   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (7m44s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:55:36.964556   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:55:46.965859   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:55:47.069205   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (7m34s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:55:47.069255   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:55:57.070619   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:55:57.187030   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (7m23s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:55:57.187083   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:56:07.188595   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:56:07.360676   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (7m13s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:56:07.360720   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:56:17.361114   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:56:17.526754   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (7m3s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:56:17.526799   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:56:27.527262   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:56:27.620481   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (6m53s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:56:27.620595   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:56:37.621241   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:56:37.750840   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (6m43s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:56:37.750866   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:56:47.754021   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:56:47.855792   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (6m33s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:56:47.855891   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:56:57.857220   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:56:57.970673   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (6m23s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:56:57.970723   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:57:07.971752   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:57:08.098762   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (6m13s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:57:08.098812   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:57:18.100218   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:57:18.204387   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (6m2s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:57:18.204445   58046 executor.go:171] Continuing to run 1 task(s)
+I0416 17:57:28.205104   58046 executor.go:113] Tasks: 61 done / 82 total; 1 can run
+W0416 17:57:28.314646   58046 executor.go:141] error running task "Subnet/europe-west1-part4-k8s-local" (5m52s remaining to succeed): cannot apply changes to Subnet: *gcetasks.Subnet {"Name":null,"Lifecycle":"","Network":null,"Region":null,"CIDR":"10.0.32.0/20","StackType":null,"Ipv6AccessType":null,"SecondaryIpRanges":null,"Shared":null}
+I0416 17:57:28.314709   58046 executor.go:171] Continuing to run 1 task(s)
