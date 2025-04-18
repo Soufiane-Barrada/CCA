@@ -3,7 +3,7 @@ set -e
 
 
 CLUSTER_NAME="part4.k8s.local"
-STATE_STORE="gs://cca-eth-2025-group-031-mpinto/"
+STATE_STORE="gs://cca-eth-2025-group-031-cmichel/"
 ZONE="europe-west1-b"
 
 export KOPS_STATE_STORE=$STATE_STORE

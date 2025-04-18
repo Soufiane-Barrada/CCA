@@ -13,28 +13,28 @@ spec:
   cloudConfig:
     gceServiceAccount: default
   cloudProvider: gce
-  configBase: gs://cca-eth-2025-group-031-mpinto/part4.k8s.local
+  configBase: gs://cca-eth-2025-group-031-cmichel/part4.k8s.local
   containerRuntime: containerd
   etcdClusters:
-  - cpuRequest: 200m
-    etcdMembers:
-    - instanceGroup: master-europe-west1-b
-      name: a
-    memoryRequest: 100Mi
-    name: main
-  - cpuRequest: 100m
-    etcdMembers:
-    - instanceGroup: master-europe-west1-b
-      name: a
-    memoryRequest: 100Mi
-    name: events
+    - cpuRequest: 200m
+      etcdMembers:
+        - instanceGroup: master-europe-west1-b
+          name: a
+      memoryRequest: 100Mi
+      name: main
+    - cpuRequest: 100m
+      etcdMembers:
+        - instanceGroup: master-europe-west1-b
+          name: a
+      memoryRequest: 100Mi
+      name: events
   iam:
     allowContainerRegistry: true
     legacy: false
   kubelet:
     anonymousAuth: false
   kubernetesApiAccess:
-  - 0.0.0.0/0
+    - 0.0.0.0/0
   kubernetesVersion: 1.31.5
   masterPublicName: api.part4.k8s.local
   networking:
@@ -42,11 +42,11 @@ spec:
   nonMasqueradeCIDR: 100.64.0.0/10
   project: cca-eth-2025-group-031
   sshAccess:
-  - 0.0.0.0/0
+    - 0.0.0.0/0
   subnets:
-  - name: europe-west1
-    region: europe-west1
-    type: Public
+    - name: europe-west1
+      region: europe-west1
+      type: Public
   topology:
     dns:
       type: None
@@ -56,7 +56,6 @@ spec:
     image: gcr.io/k8s-staging-cloud-provider-gcp/cloud-controller-manager:master@sha256:e125f4e6792978125546e64279a13de18fdf6b704edfec8400cac1254d3adf88
 
 ---
-
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
@@ -74,12 +73,11 @@ spec:
     kops.k8s.io/instancegroup: master-europe-west1-b
   role: Master
   subnets:
-  - europe-west1
+    - europe-west1
   zones:
-  - europe-west1-b
+    - europe-west1-b
 
 ---
-
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
@@ -98,12 +96,11 @@ spec:
     cca-project-nodetype: "memcached"
   role: Node
   subnets:
-  - europe-west1
+    - europe-west1
   zones:
-  - europe-west1-b
+    - europe-west1-b
 
 ---
-
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
@@ -122,11 +119,10 @@ spec:
     cca-project-nodetype: "client-measure"
   role: Node
   subnets:
-  - europe-west1
+    - europe-west1
   zones:
-  - europe-west1-b
+    - europe-west1-b
 ---
-
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
@@ -145,6 +141,6 @@ spec:
     cca-project-nodetype: "client-agent"
   role: Node
   subnets:
-  - europe-west1
+    - europe-west1
   zones:
-  - europe-west1-b
+    - europe-west1-b
