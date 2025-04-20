@@ -12,6 +12,6 @@ kops create -f part4.yaml
 kops update cluster --name part4.k8s.local --yes --admin
 kops validate cluster --wait 10m
 
-echo "[Matteo Log] cluster up!"
+#echo "[Matteo Log] cluster up!"
 #kubectl get nodes -o wide 
 

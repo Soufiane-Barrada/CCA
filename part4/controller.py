@@ -7,7 +7,7 @@ from scheduler_logger import SchedulerLogger, Job
 
 MEMCACHED_PID = None 
 MEMCACHED_THREAD_COUNT = 2 
-MEMCACHED_INITIAL_CORES = [0] 
+MEMCACHED_INITIAL_CORES = [0, 1] 
 MEMCACHED_INITIAL_CORES_STR = [str(core) for core in MEMCACHED_INITIAL_CORES] 
 BATCH_JOBS = [
     Job.BLACKSCHOLES,
