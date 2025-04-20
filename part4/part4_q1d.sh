@@ -6,6 +6,7 @@ ZONE="europe-west1-b"
 LOG_DIR="./part4_q1_logs"
 mkdir -p $LOG_DIR
 
+
 ./create_cluster.sh
 
 source ./get_node_infos.sh
@@ -35,17 +36,16 @@ AGENT_SSH_PID=$!
 trap 'echo "[Matteo Log] Cleaning up mcperf agent"; kill $AGENT_SSH_PID 2>/dev/null' EXIT
 
 
-THREADS=(2 2)
-CORES=(1 2)
+THREADS=(1 1 2 2)
+CORES=(1 2 1 2)
 
-for i in {0..1}; do
+for i in {0..3}; do
     T=${THREADS[$i]}
     C=${CORES[$i]}
 
-    for run in {1..1}; do
+    for run in {1..3}; do
         echo "[Matteo Log] Running mcperf sweep for T=$T, C=$C (run $run)"
 
-        # Configure memcached threads and CPU affinity
         gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$MEMCACHED_VM --zone=$ZONE --command "
           sudo sed -i '/^-t /d' /etc/memcached.conf &&
           echo \"-t $T\" | sudo tee -a /etc/memcached.conf &&
@@ -58,26 +58,13 @@ for i in {0..1}; do
         "
         echo "[Matteo Log] memcached taskset complete"
 
-        # Load test
         gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE_VM --zone=$ZONE --command "
           cd memcache-perf-dynamic &&
           ./mcperf -s $MEMCACHED_IP --loadonly
         "
-        echo "[Matteo Log] measure load complete"
-        
-        # Start CPU logging on memcached server
-        gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$MEMCACHED_VM --zone=$ZONE --command "
-          nohup bash -c '
-            while true; do
-              date +\"%s\" >> cpu_T${T}_C${C}_run${run}.txt
-              top -bn1 | grep \"^%Cpu\" >> cpu_T${T}_C${C}_run${run}.txt
-              sleep 5
-            done
-          ' > cpu_logger.out 2>&1 &
-          echo \$! > cpu_logger.pid
-        "
 
-        # Run the actual benchmark
+        echo "[Matteo Log] measure load complete"
+
         gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE_VM --zone=$ZONE --command "
           cd memcache-perf-dynamic &&
           ./mcperf -s $MEMCACHED_IP -a $CLIENT_AGENT_IP \
@@ -85,20 +72,15 @@ for i in {0..1}; do
             --scan 5000:220000:5000
         " | tee "$LOG_DIR/scan_T${T}_C${C}_run${run}.txt"
 
-        # Stop CPU logging
+        echo "[Matteo Log] measure run complete"
+
+        # Immediately collect CPU usage after the benchmark
         gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$MEMCACHED_VM --zone=$ZONE --command "
-          kill \$(cat cpu_logger.pid) && rm cpu_logger.pid
+          echo \"[CPU LOG] Timestamp: \$(date +%s)\" > cpu_T${T}_C${C}_run${run}.txt &&
+          top -bn1 | grep \"^%Cpu[0-9]\" >> cpu_T${T}_C${C}_run${run}.txt
         "
-
-        # Download CPU log
-        gcloud compute scp ubuntu@$MEMCACHED_VM:cpu_T${T}_C${C}_run${run}.txt $LOG_DIR/ --zone=$ZONE
-
-        
-
-
-        # Download the CPU log
-        gcloud compute scp ubuntu@$MEMCACHED_VM:cpu_T${T}_C${C}_run${run}.txt $LOG_DIR/ --zone=$ZONE
 
         echo "[Matteo Log] Done T=$T, C=$C, run $run"
     done
 done
+

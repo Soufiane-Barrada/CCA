@@ -76,7 +76,7 @@ for i in {0..3}; do
 
         #gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$MEMCACHED_VM --zone=$ZONE --command "
         #  pid=\$(pidof memcached) &&
-        #  top -b -n 1 -p \$pid | grep memcached
+        #  top -b -n 1 -p \$pid | grep "^%Cpu[0-9]"
         #" > "$LOG_DIR/cpu_T${T}_C${C}_run${run}.txt"
 
         echo "[Matteo Log] Done T=$T, C=$C, run $run"
