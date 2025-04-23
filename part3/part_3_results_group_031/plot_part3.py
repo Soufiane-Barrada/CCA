@@ -177,6 +177,7 @@ def plot_results(latency_data, job_data, run_label="run"):
         if job_name != 'memcached':
             start = (job['start'] - min_start_time) / 1000
             duration = (job['end'] - job['start']) / 1000
+            #add vertical lines
             ax1.axvline(start, color=color, linestyle='-', linewidth=1)
             ax1.axvline(start + duration, color=color, linestyle='-', linewidth=1)
             #ax2.axvline(start, color=color, linestyle='-', linewidth=0.9)

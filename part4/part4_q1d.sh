@@ -6,10 +6,18 @@ ZONE="europe-west1-b"
 LOG_DIR="./part4_q1_logs"
 mkdir -p $LOG_DIR
 
-
 ./create_cluster.sh
 
 source ./get_node_infos.sh
+
+
+#—– 1) stage the sampler on the memcached host —————————————
+echo "[Matteo Log] uploading cpu_usage.py to memcached server"
+gcloud compute scp --ssh-key-file ~/.ssh/cloud-computing \
+  cpu_usage.py \
+  ubuntu@$MEMCACHED_VM:~ --zone=$ZONE
+echo "[Matteo Log] cpu_usage.py ready on server"
+#———————————————————————————————————————————————————————————————
 
 gcloud compute scp ./memcached_init.sh ubuntu@$MEMCACHED_VM:~ --zone=$ZONE
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$MEMCACHED_VM --zone=$ZONE --command "bash memcached_init.sh $MEMCACHED_IP"
@@ -36,10 +44,10 @@ AGENT_SSH_PID=$!
 trap 'echo "[Matteo Log] Cleaning up mcperf agent"; kill $AGENT_SSH_PID 2>/dev/null' EXIT
 
 
-THREADS=(1 1 2 2)
-CORES=(1 2 1 2)
+THREADS=(2 2)
+CORES=(1 2)
 
-for i in {0..3}; do
+for i in {0..1}; do
     T=${THREADS[$i]}
     C=${CORES[$i]}
 
@@ -65,6 +73,14 @@ for i in {0..3}; do
 
         echo "[Matteo Log] measure load complete"
 
+        
+        #—– 2) launch the Python CPU sampler in the background ————————
+        echo "[Matteo Log] starting CPU sampler for T=$T C=$C run=$run"
+        gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing \
+          ubuntu@$MEMCACHED_VM --zone=$ZONE --command \
+        "nohup python3 ~/cpu_usage.py \$(pgrep memcached) > cpu_usage.log 2>&1 &"
+        
+        # now run your mcperf --scan as before
         gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE_VM --zone=$ZONE --command "
           cd memcache-perf-dynamic &&
           ./mcperf -s $MEMCACHED_IP -a $CLIENT_AGENT_IP \
@@ -73,14 +89,22 @@ for i in {0..3}; do
         " | tee "$LOG_DIR/scan_T${T}_C${C}_run${run}.txt"
 
         echo "[Matteo Log] measure run complete"
-
-        # Immediately collect CPU usage after the benchmark
-        gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$MEMCACHED_VM --zone=$ZONE --command "
-          echo \"[CPU LOG] Timestamp: \$(date +%s)\" > cpu_T${T}_C${C}_run${run}.txt &&
-          top -bn1 | grep \"^%Cpu[0-9]\" >> cpu_T${T}_C${C}_run${run}.txt
-        "
+        # After your mcperf measurement completes (after the tee command)
+        
+        #—– 3) pull back the just‐finished CPU log ————————————————
+        echo "[Matteo Log] fetching cpu_usage.log"
+        gcloud compute scp --ssh-key-file ~/.ssh/cloud-computing \
+          ubuntu@$MEMCACHED_VM:~/cpu_usage.log \
+          "$LOG_DIR/cpu_T${T}_C${C}_run${run}.txt" \
+          --zone=$ZONE
+        echo "[Matteo Log] cpu log saved: cpu_T${T}_C${C}_run${run}.txt"
+        #———————————————————————————————————————————————————————————————
+        
+        #gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$MEMCACHED_VM --zone=$ZONE --command "
+        #  pid=\$(pidof memcached) &&
+        #  top -b -n 1 -p \$pid | grep memcached
+        #" > "$LOG_DIR/cpu_T${T}_C${C}_run${run}.txt"
 
         echo "[Matteo Log] Done T=$T, C=$C, run $run"
     done
 done
-
