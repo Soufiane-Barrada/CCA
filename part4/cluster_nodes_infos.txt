@@ -1,5 +1,5 @@
-NAME                         STATUS   ROLES           AGE     VERSION   INTERNAL-IP   EXTERNAL-IP       OS-IMAGE             KERNEL-VERSION   CONTAINER-RUNTIME
-client-agent-c4wk            Ready    node            3h45m   v1.31.5   10.0.16.5     146.148.28.100    Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
-client-measure-p71z          Ready    node            3h45m   v1.31.5   10.0.16.6     130.211.108.140   Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
-master-europe-west1-b-cj0p   Ready    control-plane   3h47m   v1.31.5   10.0.16.4     34.38.204.122     Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
-memcache-server-1sfb         Ready    node            3h45m   v1.31.5   10.0.16.3     34.77.65.246      Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
+NAME                         STATUS   ROLES           AGE    VERSION   INTERNAL-IP   EXTERNAL-IP     OS-IMAGE             KERNEL-VERSION   CONTAINER-RUNTIME
+client-agent-7n3p            Ready    node            169m   v1.31.5   10.0.16.4     34.34.184.241   Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
+client-measure-q1rd          Ready    node            169m   v1.31.5   10.0.16.3     34.78.145.214   Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
+master-europe-west1-b-7gj0   Ready    control-plane   171m   v1.31.5   10.0.16.6     35.233.40.21    Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
+memcache-server-4zw3         Ready    node            169m   v1.31.5   10.0.16.5     34.140.37.188   Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25

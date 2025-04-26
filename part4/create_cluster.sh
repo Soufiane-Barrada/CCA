@@ -2,13 +2,13 @@
 set -e
 
 CLUSTER_NAME="part4.k8s.local"
-STATE_STORE="gs://cca-eth-2025-group-0031-cmichel/"
+STATE_STORE="gs://cca-eth-2025-group-0031-mpinto/"
 ZONE="europe-west1-b"
  
 export KOPS_STATE_STORE=$STATE_STORE
 export PROJECT=`gcloud config get-value project`
  
-#kops create -f part4.yaml
+kops create -f part4.yaml
 kops update cluster --name $CLUSTER_NAME --yes --admin 
 kops validate cluster --wait 10m
  
