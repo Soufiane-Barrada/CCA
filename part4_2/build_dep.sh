@@ -1,12 +1,9 @@
 #!/bin/bash 
 
 sudo apt update -y
-echo "SOUFIANE 1"
 sudo apt install -y \
     python3-pip \
     docker.io \
     python3-docker \
     python3-psutil
-echo "SOUFIANE 4"
 sudo usermod -aG docker ubuntu
-echo "SOUFIANE 5"

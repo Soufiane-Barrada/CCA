@@ -121,6 +121,9 @@ if __name__ == "__main__":
                 else : 
                     print("[MP_INFO] all jobs completed") 
                     break
+            
+            if job_index == 7:
+                break
 
            
             time.sleep(5)  #check every 5s

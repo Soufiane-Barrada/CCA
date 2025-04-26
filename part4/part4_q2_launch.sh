@@ -1,4 +1,8 @@
 set -e
+# gcloud config set account sbarrada@ethz.ch
+# gcloud auth login
+# gcloud config set project $PROJECT
+# gcloud auth application-default login
 
 # Start
 export PROJECT=`gcloud config get-value project`
@@ -40,6 +44,7 @@ trap 'kill $AGENT_SSH_PID 2>/dev/null' EXIT
 
 
 #                                         Here we should add a Loop
+
 #Run the controller
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$MEMCACHED_VM --zone=$ZONE < controller_runner.sh &
 # Launch the Measure
@@ -48,15 +53,23 @@ gcloud compute ssh ubuntu@$CLIENT_MEASURE_VM --zone=$ZONE --command "
   ./mcperf -s $MEMCACHED_IP --loadonly &&
   ./mcperf -s $MEMCACHED_IP -a $CLIENT_AGENT_IP \
   --noload -T 8 -C 8 -D 4 -Q 1000 -c 8 -t 1200 \
-  --qps_interval 2 --qps_min 5000 --qps_max 180000 \
+  --qps_interval 10 --qps_min 5000 --qps_max 180000 \
   --qps_seed 8 > measure.txt
 "
-gcloud compute scp ubuntu@$CLIENT_MEASURE_VM:~/memcache-perf-dynamic/measure.txt part4_q2_results/measure.txt --zone=$ZONE --ssh-key-file ~/.ssh/cloud-computing
-gcloud compute scp ubuntu@$MEMCACHED_VM:~/log.txt part4_q2_results/jobs.txt --zone=$ZONE --ssh-key-file ~/.ssh/cloud-computing
+
+$ ./mcperf -s INTERNAL_MEMCACHED_IP --loadonly
+$ ./mcperf -s INTERNAL_MEMCACHED_IP -a INTERNAL_AGENT_IP \
+--noload -T 8 -C 8 -D 4 -Q 1000 -c 8 -t 1800 \
+--qps_interval 10 --qps_min 5000 --qps_max 180000
+
+gcloud compute scp ubuntu@$CLIENT_MEASURE_VM:~/memcache-perf-dynamic/measure.txt ./part4_q2_results/measure.txt --zone=$ZONE --ssh-key-file ~/.ssh/cloud-computing
+gcloud compute scp ubuntu@$MEMCACHED_VM:~/log.txt ./part4_q2_results/jobs.txt --zone=$ZONE --ssh-key-file ~/.ssh/cloud-computing
 
 
 
 
 
-# DOne
+# Done
 gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_AGENT_VM --zone=$ZONE < kill_process.sh &
+
+# kops delete cluster --name part4.k8s.local --yes

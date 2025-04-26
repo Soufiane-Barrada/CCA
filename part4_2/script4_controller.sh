@@ -1,11 +1,13 @@
 #!/bin/bash
-
+# gcloud config set account sbarrada@ethz.ch
+# gcloud auth login
+# gcloud config set project $PROJECT
+# gcloud auth application-default login
 set -e
-
 
 CLUSTER_NAME="part4.k8s.local"
 ZONE="europe-west1-b"
-CONTROLLER_SCRIPT="controller_v2.py"
+CONTROLLER_SCRIPT="controller.py"
 LOGGER_SCRIPT="scheduler_logger.py"
 
 #*************************************************************************
@@ -80,9 +82,12 @@ gcloud compute ssh --ssh-key-file ~/.ssh/cloud-computing ubuntu@$CLIENT_MEASURE_
 
 
 
-gcloud compute scp ubuntu@$CLIENT_MEASURE_VM:~/memcache-perf-dynamic/measure.txt ./part4_q2_results/measure.txt --zone=$ZONE --ssh-key-file ~/.ssh/cloud-computing
-gcloud compute scp ubuntu@$MEMCACHED_VM:~/log.txt ./part4_q2_results/jobs.txt --zone=$ZONE --ssh-key-file ~/.ssh/cloud-computing
+gcloud compute scp ubuntu@$CLIENT_MEASURE_VM:~/memcache-perf-dynamic/measure.txt ./results/measure.txt --zone=$ZONE --ssh-key-file ~/.ssh/cloud-computing
+gcloud compute scp ubuntu@$MEMCACHED_VM:~/log.txt ./results/jobs.txt --zone=$ZONE --ssh-key-file ~/.ssh/cloud-computing
 
 # Done
 gcloud compute ssh ubuntu@$CLIENT_AGENT_VM --zone=$ZONE --command "bash -s" < kill_process.sh &
+
+
+# kops delete cluster --name part4.k8s.local --yes
 
