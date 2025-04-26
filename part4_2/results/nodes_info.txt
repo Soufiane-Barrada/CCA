@@ -1,0 +1,6 @@
+MEMCACHED_VM="memcache-server-3mtf"
+MEMCACHED_IP="10.0.16.4"
+CLIENT_AGENT_VM="client-agent-xlw3"
+CLIENT_AGENT_IP="10.0.16.5"
+CLIENT_MEASURE_VM="client-measure-23jc"
+CLIENT_MEASURE_IP="10.0.16.6"
