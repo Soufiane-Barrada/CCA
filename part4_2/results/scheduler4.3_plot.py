@@ -145,7 +145,7 @@ if memcached_cores:
         })
 
 # Create the plot
-fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(12, 12), sharex=True, gridspec_kw={'height_ratios': [1, 1, 1]})
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(16, 12), sharex=True, gridspec_kw={'height_ratios': [1, 1, 1]})
 
 # Plot 1A: Memcached p95 latency and achieved QPS
 ax1.set_title('1A')
@@ -153,23 +153,26 @@ ax1_qps = ax1.twinx()
 
 # Plot p95 latency
 line1 = ax1.plot(perf_df['seconds'], perf_df['p95']/1000, 'o-', color='orange', markersize=3, label='Memcached p95 latency')
-ax1.set_ylabel('memcached p95 [ms]', color='orange')
+ax1.set_ylabel('memcached p95 [ms]', color='orange', fontweight='bold')
 ax1.set_ylim(0, 1.2)
 ax1.tick_params(axis='y', labelcolor='orange')
 
 # Plot achieved QPS
 line2 = ax1_qps.plot(perf_df['seconds'], perf_df['QPS'], 'o-', color='steelblue', markersize=3, label='Memcached achieved QPS')
-ax1_qps.set_ylabel('memcached QPS', color='steelblue')
+ax1_qps.set_ylabel('memcached QPS', color='steelblue', fontweight='bold')
 ax1_qps.set_ylim(0, 230000)  # Increased to 230,000
 ax1_qps.tick_params(axis='y', labelcolor='steelblue')
 
 # Add a horizontal line at target QPS
-ax1_qps.axhline(y=153400, color='r', linestyle='-', alpha=0.7)
+# Create an array of 120 elements, all 0.8
+slo_array = np.full(120, 153400)
+my_array = np.linspace(-20, 120000, 120)
+line_slo = ax1_qps.plot(my_array, slo_array, '-', color='r', alpha=0.7, label='SLO (0.8 ms)')
 
 # Combine the legends
-lines = line1 + line2
+lines = line1 + line2 + line_slo
 labels = [l.get_label() for l in lines]
-ax1.legend(lines, labels, loc='upper right')
+ax1.legend(lines, labels, bbox_to_anchor=(1, 1.27), loc='upper right')
 
 # Plot 1B: Memcached used cores and achieved QPS
 ax2.set_title('1B')
@@ -203,7 +206,7 @@ print("-----------fixed core----------------")
 print(fixed_core_counts)
 
 line3 = ax2.step(times, fixed_core_counts, where='post', color='orange', label='Memcached used cores')
-ax2.set_ylabel('memcached core number', color='orange')
+ax2.set_ylabel('memcached core number', color='orange', fontweight='bold')
 ax2.set_ylim(0, 4)
 ax2.set_yticks([0, 1, 2, 3, 4])  # Set integer ticks only
 ax2.tick_params(axis='y', labelcolor='orange')
@@ -211,14 +214,14 @@ print("--------------------")
 print(perf_df['seconds'].iloc[-1])
 # Plot achieved QPS (same as in the first plot)
 line4 = ax2_qps.plot(perf_df['seconds'], perf_df['QPS'], 'o-', color='steelblue', markersize=3, label='Memcached achieved QPS')
-ax2_qps.set_ylabel('memcached QPS', color='steelblue')
+ax2_qps.set_ylabel('memcached QPS', color='steelblue', fontweight='bold')
 ax2_qps.set_ylim(0, 230000)  # Increased to 230,000
 ax2_qps.tick_params(axis='y', labelcolor='steelblue')
 
 # Combine the legends
 lines_b = line3 + line4
 labels_b = [l.get_label() for l in lines_b]
-ax2.legend(lines_b, labels_b, loc='upper right')
+ax2.legend(lines_b, labels_b, bbox_to_anchor=(1, 1.2), loc='upper right')
 
 # Define the colors for each benchmark
 colors = {
