@@ -9,18 +9,18 @@ from scheduler_logger import SchedulerLogger, Job
 # -- Configuration -----------------------------------------------------------
 TOTAL_CORES = [0, 1, 2, 3]
 MEMCACHED_SERVICE = "memcached"
-CPU_THRESHOLD = 0             # %% usage threshold to switch cores
-POLL_INTERVAL = 0.1                # seconds between control-loop iterations
+CPU_THRESHOLD = 60             # %% usage threshold to switch cores  60
+#POLL_INTERVAL = 0.1                # seconds between control-loop iterations
 
 # Per-job thread tuning
 JOB_THREADS = {
-    Job.BLACKSCHOLES: 3,
+    Job.BLACKSCHOLES: 2,
     Job.CANNEAL:     3,
-    Job.DEDUP:       3,
+    Job.DEDUP:       1,
     Job.FERRET:      3,
     Job.FREQMINE:    3,
-    Job.RADIX:       2,
-    Job.VIPS:        3,
+    Job.RADIX:       1,
+    Job.VIPS:        1,
 }
 
 # Ordered groups to launch sequentially
@@ -33,14 +33,14 @@ JOB_GROUPS = [
 # Helpers
 def run(cmd: str) -> subprocess.CompletedProcess:
     """Run a shell command and return the CompletedProcess."""
-    print(f"[CMD] {cmd}")
+    #print(f"[CMD] {cmd}")
     return subprocess.run(cmd, shell=True, capture_output=True, text=True)
 
 
 def get_memcached_pid() -> int:
     """ """
     pid = int(run(f"pidof {MEMCACHED_SERVICE}").stdout.strip())
-    print(f"[INFO] memcached PID={pid}")
+    #print(f"[INFO] memcached PID={pid}")
     return pid
 
 
@@ -48,13 +48,13 @@ def set_affinity(pid: int, cores: list[int]) -> None:
     """Bind a process to a set of CPU cores."""
     core_str = ",".join(map(str, cores))
     run(f"sudo taskset -a -cp {core_str} {pid}")
-    print(f"[INFO] Set PID {pid} affinity to {core_str}")
+    #print(f"[INFO] Set PID {pid} affinity to {core_str}")
 
 
 def get_memcached_needed_cores(pid: int) -> int:
     """Return required core count (1 or 2) based on memcached CPU% usage."""
     usage = psutil.Process(pid).cpu_percent(interval=1)
-    print(f"[INFO] memcached CPU%: {usage}")
+    #print(f"[INFO] memcached CPU%: {usage}")
     return 2 if usage > CPU_THRESHOLD else 1
 
 
@@ -72,7 +72,7 @@ def launch_batch_job(
     try:
         old = client.containers.get(job.value)
         old.remove(force=True)
-        print(f"[INFO] Removed leftover '{job.value}' container")
+        #print(f"[INFO] Removed leftover '{job.value}' container")
     except NotFound:
         pass
 
@@ -86,11 +86,11 @@ def launch_batch_job(
             remove=False,
         )
     except APIError as e:
-        print(f"[ERROR] launching {job.value}: {e}")
+        #print(f"[ERROR] launching {job.value}: {e}")
         raise
 
     logger.job_start(job, cores, threads)
-    print(f"[INFO] Launched {job.value} on {cores} ({threads} threads)")
+    #print(f"[INFO] Launched {job.value} on {cores} ({threads} threads)")
     return container
 
 
@@ -105,7 +105,7 @@ def update_batch_affinity(
         if enum_job:
             c.update(cpuset_cpus=core_str)
             logger.update_cores(enum_job, free_cores)
-            print(f"[INFO] Updated {enum_job.value} -> {free_cores}")
+            #print(f"[INFO] Updated {enum_job.value} -> {free_cores}")
 
 # Main control loop
 if __name__ == "__main__":
@@ -140,12 +140,12 @@ if __name__ == "__main__":
                     cont.reload()
                 except NotFound:
                     logger.job_end(job)
-                    print(f"[INFO] {job.value} container missing; marking complete")
+                    #print(f"[INFO] {job.value} container missing; marking complete")
                     continue
                 if cont.status != "running":
                     exit_code = cont.attrs['State']['ExitCode']
                     logger.job_end(job)
-                    print(f"[INFO] {job.value} exited with code {exit_code}")
+                    #print(f"[INFO] {job.value} exited with code {exit_code}")
                     cont.remove()
                 else:
                     still_active.append((job, cont))

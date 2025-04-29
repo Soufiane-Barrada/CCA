@@ -285,5 +285,5 @@ for ax in [ax1, ax2, ax3]:
 
 # Final layout adjustments
 plt.tight_layout()
-plt.savefig('job_performance_analysis.png', dpi=300)
+plt.savefig('job_performance_analysis_10_60_30.png', dpi=300)
 plt.show()

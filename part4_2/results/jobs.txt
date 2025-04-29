@@ -1,64 +1,55 @@
-2025-04-26T12:40:50.709223 start scheduler
-2025-04-26T12:40:50.733817 start memcached [0,1] 2
-2025-04-26T12:40:51.745601 update_cores memcached [0]
-2025-04-26T12:41:06.489190 start blackscholes [1,2,3] 2
-2025-04-26T12:41:16.229187 start canneal [1,2,3] 2
-2025-04-26T12:41:22.263278 update_cores memcached [0,1]
-2025-04-26T12:41:22.333152 update_cores canneal [2,3]
-2025-04-26T12:41:22.376264 update_cores blackscholes [2,3]
-2025-04-26T12:42:28.449563 update_cores memcached [0]
-2025-04-26T12:42:28.475625 update_cores canneal [1,2,3]
-2025-04-26T12:42:28.500723 update_cores blackscholes [1,2,3]
-2025-04-26T12:42:40.533031 update_cores memcached [0,1]
-2025-04-26T12:42:40.565146 update_cores canneal [2,3]
-2025-04-26T12:42:40.592091 update_cores blackscholes [2,3]
-2025-04-26T12:42:46.597553 end blackscholes
-2025-04-26T12:43:40.821368 update_cores memcached [0]
-2025-04-26T12:43:40.844494 update_cores canneal [1,2,3]
-2025-04-26T12:43:58.869032 update_cores memcached [0,1]
-2025-04-26T12:43:58.900430 update_cores canneal [2,3]
-2025-04-26T12:44:10.907711 end canneal
-2025-04-26T12:44:33.429470 start dedup [2,3] 2
-2025-04-26T12:44:56.246955 end dedup
-2025-04-26T12:45:02.998846 start ferret [2,3] 2
-2025-04-26T12:45:15.015559 start freqmine [2,3] 2
-2025-04-26T12:46:51.099262 update_cores memcached [0]
-2025-04-26T12:46:51.126620 update_cores freqmine [1,2,3]
-2025-04-26T12:46:51.150976 update_cores ferret [1,2,3]
-2025-04-26T12:47:09.192147 update_cores memcached [0,1]
-2025-04-26T12:47:09.244234 update_cores freqmine [2,3]
-2025-04-26T12:47:09.280494 update_cores ferret [2,3]
-2025-04-26T12:48:03.351260 update_cores memcached [0]
-2025-04-26T12:48:03.378097 update_cores freqmine [1,2,3]
-2025-04-26T12:48:03.405023 update_cores ferret [1,2,3]
-2025-04-26T12:48:09.429595 update_cores memcached [0,1]
-2025-04-26T12:48:09.475462 update_cores freqmine [2,3]
-2025-04-26T12:48:09.499490 update_cores ferret [2,3]
-2025-04-26T12:48:33.532597 update_cores memcached [0]
-2025-04-26T12:48:33.560562 update_cores freqmine [1,2,3]
-2025-04-26T12:48:33.588068 update_cores ferret [1,2,3]
-2025-04-26T12:48:51.623820 update_cores memcached [0,1]
-2025-04-26T12:48:51.659484 update_cores freqmine [2,3]
-2025-04-26T12:48:51.691061 update_cores ferret [2,3]
-2025-04-26T12:50:57.809847 update_cores memcached [0]
-2025-04-26T12:50:57.835570 update_cores freqmine [1,2,3]
-2025-04-26T12:50:57.873492 update_cores ferret [1,2,3]
-2025-04-26T12:51:09.918255 update_cores memcached [0,1]
-2025-04-26T12:51:09.954719 update_cores freqmine [2,3]
-2025-04-26T12:51:09.976293 update_cores ferret [2,3]
-2025-04-26T12:52:04.024521 end ferret
-2025-04-26T12:52:28.178285 update_cores memcached [0]
-2025-04-26T12:52:28.204180 update_cores freqmine [1,2,3]
-2025-04-26T12:52:52.230537 update_cores memcached [0,1]
-2025-04-26T12:52:52.256334 update_cores freqmine [2,3]
-2025-04-26T12:52:58.261310 end freqmine
-2025-04-26T12:53:00.106237 start radix [2,3] 2
-2025-04-26T12:53:52.550725 start vips [2,3] 2
-2025-04-26T12:53:58.553242 end radix
-2025-04-26T12:54:22.916530 update_cores memcached [0]
-2025-04-26T12:54:22.941102 update_cores vips [1,2,3]
-2025-04-26T12:54:28.961918 update_cores memcached [0,1]
-2025-04-26T12:54:28.987866 update_cores vips [2,3]
-2025-04-26T12:54:45.211707 end vips
-2025-04-26T12:54:45.625076 end memcached
-2025-04-26T12:54:45.625100 end scheduler
+2025-04-28T09:06:04.182414 start scheduler
+2025-04-28T09:06:04.210971 start memcached [0,1] 2
+2025-04-28T09:06:10.223969 update_cores memcached [0]
+2025-04-28T09:06:10.455097 start blackscholes [1,2,3] 3
+2025-04-28T09:06:10.677232 start canneal [1,2,3] 3
+2025-04-28T09:06:10.931881 start dedup [1,2,3] 3
+2025-04-28T09:06:32.100064 update_cores memcached [0,1]
+2025-04-28T09:06:32.989552 update_cores dedup [2,3]
+2025-04-28T09:06:33.919231 update_cores canneal [2,3]
+2025-04-28T09:06:34.581051 update_cores blackscholes [2,3]
+2025-04-28T09:06:40.108179 end dedup
+2025-04-28T09:07:42.804097 update_cores memcached [0]
+2025-04-28T09:07:42.834390 update_cores canneal [1,2,3]
+2025-04-28T09:07:42.861721 update_cores blackscholes [1,2,3]
+2025-04-28T09:08:01.500850 end blackscholes
+2025-04-28T09:08:02.737703 update_cores memcached [0,1]
+2025-04-28T09:08:02.785899 update_cores canneal [2,3]
+2025-04-28T09:08:52.964038 update_cores memcached [0]
+2025-04-28T09:08:52.989220 update_cores canneal [1,2,3]
+2025-04-28T09:09:12.078986 update_cores memcached [0,1]
+2025-04-28T09:09:12.115571 update_cores canneal [2,3]
+2025-04-28T09:09:30.169368 end canneal
+2025-04-28T09:09:30.432797 start vips [2,3] 3
+2025-04-28T09:09:30.678596 start radix [2,3] 2
+2025-04-28T09:09:30.970718 start ferret [2,3] 3
+2025-04-28T09:10:53.594975 end radix
+2025-04-28T09:11:12.730051 update_cores memcached [0]
+2025-04-28T09:11:12.766698 update_cores ferret [1,2,3]
+2025-04-28T09:11:12.797713 update_cores vips [1,2,3]
+2025-04-28T09:11:32.939183 update_cores memcached [0,1]
+2025-04-28T09:11:32.976261 update_cores ferret [2,3]
+2025-04-28T09:11:33.000095 update_cores vips [2,3]
+2025-04-28T09:11:45.451707 end vips
+2025-04-28T09:12:03.204996 update_cores memcached [0]
+2025-04-28T09:12:03.238150 update_cores ferret [1,2,3]
+2025-04-28T09:12:22.323365 update_cores memcached [0,1]
+2025-04-28T09:12:22.380186 update_cores ferret [2,3]
+2025-04-28T09:13:12.594364 update_cores memcached [0]
+2025-04-28T09:13:12.623633 update_cores ferret [1,2,3]
+2025-04-28T09:13:32.714801 update_cores memcached [0,1]
+2025-04-28T09:13:32.779895 update_cores ferret [2,3]
+2025-04-28T09:13:42.830197 update_cores memcached [0]
+2025-04-28T09:13:42.860836 update_cores ferret [1,2,3]
+2025-04-28T09:14:11.962174 update_cores memcached [0,1]
+2025-04-28T09:14:11.965637 end ferret
+2025-04-28T09:14:12.327162 start freqmine [2,3] 3
+2025-04-28T09:16:12.717679 update_cores memcached [0]
+2025-04-28T09:16:12.745847 update_cores freqmine [1,2,3]
+2025-04-28T09:16:32.834688 update_cores memcached [0,1]
+2025-04-28T09:16:32.882270 update_cores freqmine [2,3]
+2025-04-28T09:17:43.147827 update_cores memcached [0]
+2025-04-28T09:17:43.172845 update_cores freqmine [1,2,3]
+2025-04-28T09:18:21.294530 end freqmine
+2025-04-28T09:18:21.335848 end memcached
+2025-04-28T09:18:21.335871 end scheduler
