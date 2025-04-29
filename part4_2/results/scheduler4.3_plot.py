@@ -67,8 +67,12 @@ timestamp_start = int(re.search(r'Timestamp start: (\d+)', content).group(1))
 timestamp_end = int(re.search(r'Timestamp end: (\d+)', content).group(1))
 total_intervals = int(re.search(r'Total number of intervals = (\d+)', content).group(1))
 
-# Calculate time step
+# Calculate time step and total duration in seconds
 time_step = (timestamp_end - timestamp_start) / total_intervals
+total_duration_seconds = (timestamp_end - timestamp_start) / 1000  # Convert ms to seconds
+
+# Use the total duration instead of fixed 1200 seconds
+display_max_time = total_duration_seconds
 
 # Extract performance data
 performance_data = []
@@ -122,7 +126,7 @@ for _, row in jobs_df[jobs_df['job'] == 'memcached'].iterrows():
 
 # Get the maximum time from QPS data for proper display
 max_qps_time = perf_df['seconds'].max()
-display_max_time = 1200  # Set fixed display to 1200 seconds
+#display_max_time = 1200  # Set fixed display to 1200 seconds
 
 # Make sure we have the last core count and extend it to the end of the plot
 if memcached_cores:
@@ -258,7 +262,10 @@ for i, job in enumerate(job_names):
         ax3.text(timeline['start'] + duration/2, i, f"{int(duration)}s", 
                  va='center', ha='center', fontsize=8, color='black')
 
-x_ticks = np.arange(0, display_max_time + 50, 50)
+#x_ticks = np.arange(0, display_max_time + 50, 50)
+# Dynamically calculate tick intervals based on total duration
+tick_interval = max(50, int(total_duration_seconds / 20))  # At least 50s, or divide duration into ~20 ticks
+x_ticks = np.arange(0, display_max_time + tick_interval, tick_interval)
 
 # Add vertical lines at job start and end times
 for job in job_timelines:
@@ -273,7 +280,7 @@ for job in job_timelines:
         axes.set_xticklabels([str(t) for t in x_ticks])
         axes.tick_params(axis='x', labelbottom=True) 
         axes.xaxis.set_visible(True)  # ensure x-axis is visible
-        
+        axes.set_xlim(-20, display_max_time)
 
 ax3.set_xlabel('time [s]')
 
