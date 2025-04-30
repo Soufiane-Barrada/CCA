@@ -6,10 +6,10 @@ from datetime import datetime, timedelta
 import re
 import math
 
-
+run = 3
 # Parse jobs.txt
 jobs_data = []
-with open('jobs.txt', 'r') as f:
+with open(f'jobs_{run}.txt', 'r') as f:
     for line in f:
         parts = line.strip().split()
         if len(parts) >= 2:
@@ -59,7 +59,7 @@ jobs_df = pd.DataFrame(jobs_data)
 jobs_df['datetime'] = pd.to_datetime(jobs_df['timestamp'])
 
 # Parse measure.txt
-with open('measure.txt', 'r') as f:
+with open(f'mcperf_{run}.txt', 'r') as f:
     content = f.read()
 
 # Extract timestamp information
@@ -72,7 +72,7 @@ time_step = (timestamp_end - timestamp_start) / total_intervals
 total_duration_seconds = (timestamp_end - timestamp_start) / 1000  # Convert ms to seconds
 
 # Use the total duration instead of fixed 1200 seconds
-display_max_time = total_duration_seconds
+display_max_time = int(total_duration_seconds)
 
 # Extract performance data
 performance_data = []
@@ -152,7 +152,7 @@ if memcached_cores:
 fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(16, 12), sharex=True, gridspec_kw={'height_ratios': [1, 1, 1]})
 
 # Plot 1A: Memcached p95 latency and achieved QPS
-ax1.set_title('1A')
+ax1.set_title(f'{run}A')
 ax1_qps = ax1.twinx()
 
 # Plot p95 latency
@@ -179,7 +179,7 @@ labels = [l.get_label() for l in lines]
 ax1.legend(lines, labels, bbox_to_anchor=(1, 1.27), loc='upper right')
 
 # Plot 1B: Memcached used cores and achieved QPS
-ax2.set_title('1B')
+ax2.set_title(f'{run}B')
 ax2_qps = ax2.twinx()
 
 # Sort memcached cores by time to ensure proper display
@@ -292,5 +292,5 @@ for ax in [ax1, ax2, ax3]:
 
 # Final layout adjustments
 plt.tight_layout()
-plt.savefig('job_performance_analysis_10_60_30.png', dpi=300)
+plt.savefig(f'Part4_3_run{run}.png', dpi=300)
 plt.show()
