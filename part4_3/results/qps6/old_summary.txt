@@ -1,0 +1,9 @@
+Job        Mean [s]   Std Dev [s]
+------------------------------
+blackscholes   143.68        17.67
+canneal      205.37         5.15
+dedup         43.33         3.02
+ferret       275.62         5.08
+freqmine     249.66         8.20
+radix         73.96         2.16
+vips         145.36         4.85

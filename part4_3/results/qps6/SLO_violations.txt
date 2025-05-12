@@ -1,0 +1,14 @@
+run1: 
+violations: 4, total points: 125
+SLO violation rate: 3.20%
+run2: 
+violations: 3, total points: 122
+SLO violation rate: 2.45%
+run3:
+violations: 3, total points: 122
+SLO violation rate: 2.45%
+run4: 
+violations: 5, total points: 126 
+SLO violation rate: 3.96% 
+
+mean: 3.01%

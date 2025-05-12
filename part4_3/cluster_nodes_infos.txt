@@ -1,0 +1,5 @@
+NAME                         STATUS   ROLES           AGE    VERSION   INTERNAL-IP   EXTERNAL-IP     OS-IMAGE             KERNEL-VERSION   CONTAINER-RUNTIME
+client-agent-vwdr            Ready    node            5h     v1.31.5   10.0.16.5     34.38.32.223    Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
+client-measure-mr17          Ready    node            5h     v1.31.5   10.0.16.3     34.79.120.31    Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
+master-europe-west1-b-4brk   Ready    control-plane   5h3m   v1.31.5   10.0.16.6     34.77.84.101    Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.25
+memcache-server-p325         Ready    node            5h1m   v1.31.5   10.0.16.4     34.22.185.146   Ubuntu 24.04.1 LTS   6.8.0-1021-gcp   containerd://1.7.24

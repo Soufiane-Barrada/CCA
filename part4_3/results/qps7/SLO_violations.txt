@@ -1,0 +1,9 @@
+run1: 
+violations: 2, total points: 108
+SLO violation rate: 1.85%
+run2:
+violations: 2, total points: 107
+SLO violation rate: 1.86%
+run3: 
+violations: 2, total points: 107 
+SLO violation rate: 1.86%

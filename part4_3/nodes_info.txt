@@ -1,0 +1,6 @@
+MEMCACHED_VM="memcache-server-p325"
+MEMCACHED_IP="10.0.16.4"
+CLIENT_AGENT_VM="client-agent-vwdr"
+CLIENT_AGENT_IP="10.0.16.5"
+CLIENT_MEASURE_VM="client-measure-mr17"
+CLIENT_MEASURE_IP="10.0.16.3"
